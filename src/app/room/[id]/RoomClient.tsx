@@ -378,8 +378,18 @@ export default function RoomClient({ roomId }: RoomClientProps) {
 
       const dataUrl = canvas.toDataURL('image/png');
       
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
+      // Convert Data URL to Blob manually. fetch() on large data URLs fails on many browsers.
+      const arr = dataUrl.split(',');
+      const mimeMatch = arr[0].match(/:(.*?);/);
+      const mime = mimeMatch ? mimeMatch[1] : 'image/png';
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+      }
+      const blob = new Blob([u8arr], {type: mime});
+      
       const fileName = `ldr-photobooth-${Date.now()}.png`;
       const file = new File([blob], fileName, { type: 'image/png' });
 
@@ -412,8 +422,9 @@ export default function RoomClient({ roomId }: RoomClientProps) {
         document.body.removeChild(link);
         setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to bake stickers', err);
+      alert('Error downloading: ' + (err.message || err.toString() || 'Unknown error'));
     }
   };
 
