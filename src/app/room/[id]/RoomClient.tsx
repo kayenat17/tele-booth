@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { Camera, Download, Trash2 } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import { motion } from 'framer-motion';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -370,13 +370,9 @@ export default function RoomClient({ roomId }: RoomClientProps) {
     if (!exportRef.current) return;
 
     try {
-      const canvas = await html2canvas(exportRef.current, {
-        backgroundColor: null,
-        scale: 2, // High res
-        useCORS: true // Required for Supabase images
+      const dataUrl = await toPng(exportRef.current, {
+        pixelRatio: 2, // High res
       });
-
-      const dataUrl = canvas.toDataURL('image/png');
       
       // Convert Data URL to Blob manually. fetch() on large data URLs fails on many browsers.
       const arr = dataUrl.split(',');
