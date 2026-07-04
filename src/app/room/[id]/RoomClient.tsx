@@ -387,7 +387,7 @@ export default function RoomClient({ roomId }: RoomClientProps) {
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] flex flex-col p-4 md:p-8 selection:bg-rose-200 relative overflow-hidden font-sans">
-      
+
       {/* Soft gradient background elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-rose-200/40 blur-[100px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-[100px] pointer-events-none" />
@@ -397,9 +397,9 @@ export default function RoomClient({ roomId }: RoomClientProps) {
           <h1 className="text-xl font-light text-slate-800 tracking-[0.2em] uppercase">
             Studio LDR
           </h1>
-          <p className="text-xs font-medium text-slate-500 tracking-wider mt-1">Share this link to invite your partner 💌</p>
+          <p className="text-xs font-medium text-slate-500 tracking-wider mt-1">Share this link to invite your partner & friends ʚ🍓ɞ🍡</p>
         </div>
-        <button 
+        <button
           onClick={() => navigator.clipboard.writeText(window.location.href)}
           className="text-xs uppercase tracking-wider bg-rose-400 hover:bg-rose-500 text-white px-6 py-3 rounded-full font-medium shadow-lg shadow-rose-400/20 hover:shadow-rose-400/40 hover:-translate-y-0.5 transition-all"
         >
@@ -432,7 +432,7 @@ export default function RoomClient({ roomId }: RoomClientProps) {
           {/* Camera Feeds */}
           <div className="w-full flex justify-center items-center flex-1 px-4 mb-24 mt-8 md:mt-12">
             <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full max-w-5xl transition-all duration-700 ${countdown !== null ? 'scale-[1.02] drop-shadow-2xl' : 'scale-100'} ${isStitching ? 'opacity-0 scale-95 blur-md' : 'opacity-100'}`}>
-              
+
               {/* Remote Feed Cell */}
               <div className="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-lg bg-white/50 backdrop-blur-sm border border-white/50">
                 <video
@@ -474,7 +474,7 @@ export default function RoomClient({ roomId }: RoomClientProps) {
           {/* Countdown Overlay */}
           {countdown !== null && (
             <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none">
-              <span 
+              <span
                 className="text-[12rem] font-light text-white drop-shadow-[0_0_40px_rgba(0,0,0,0.3)] animate-pulse"
               >
                 {countdown}
@@ -485,7 +485,7 @@ export default function RoomClient({ roomId }: RoomClientProps) {
           {/* Shutter Button */}
           {partnerJoined && !isStitching && !stitchedPhoto && countdown === null && (
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
-              <button 
+              <button
                 onClick={handleShutterClick}
                 className="w-20 h-20 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center shadow-2xl border border-white hover:scale-105 active:scale-95 transition-all group"
               >
@@ -508,13 +508,13 @@ export default function RoomClient({ roomId }: RoomClientProps) {
           {stitchedPhoto && (
             /* Deco Mode UI Wrapper */
             <div className="absolute inset-0 z-40 flex flex-col lg:flex-row bg-[#FAFAFA] overflow-hidden">
-              
+
               {/* Sticker Palette Sidebar (Horizontal on mobile, vertical on desktop) */}
               <div className="w-full lg:w-32 h-24 lg:h-full bg-white/60 border-b lg:border-b-0 lg:border-r border-white shadow-sm lg:shadow-xl flex flex-row lg:flex-col items-center p-4 lg:p-6 overflow-x-auto lg:overflow-x-hidden overflow-y-hidden lg:overflow-y-auto shrink-0 relative z-50">
                 <p className="hidden lg:block font-medium text-[10px] text-slate-500 tracking-[0.2em] uppercase mb-8 pb-2 border-b border-slate-200 text-center w-full">Deco</p>
                 <div className="flex flex-row lg:flex-col gap-4 justify-start lg:justify-center items-center h-full lg:h-auto min-w-max lg:min-w-0">
                   {STICKERS_PALETTE.map((emoji, i) => (
-                    <button 
+                    <button
                       key={i}
                       onClick={() => {
                         const newId = Math.random().toString();
@@ -536,10 +536,10 @@ export default function RoomClient({ roomId }: RoomClientProps) {
 
               {/* Main Deco Area */}
               <div className="flex-1 h-full relative flex flex-col items-center justify-start p-8 overflow-y-auto">
-                
+
                 {/* Constraints box for framer motion drag */}
                 <div ref={constraintsRef} className="w-full flex justify-center pb-32">
-                  
+
                   {/* The actual export wrapper that html2canvas will target */}
                   <div ref={exportRef} className="relative w-full max-w-[320px] shadow-2xl shadow-slate-300/50 rounded-lg overflow-hidden">
                     <img src={stitchedPhoto} alt="Our Photobooth" className="w-full pointer-events-none" />
@@ -557,7 +557,7 @@ export default function RoomClient({ roomId }: RoomClientProps) {
                           const sizes = [0.7, 1.0, 1.5, 2.0];
                           const currentIndex = sizes.indexOf(sticker.scale);
                           const nextSize = sizes[(currentIndex + 1) % sizes.length];
-                          
+
                           setStickers(prev => prev.map(s => s.id === sticker.id ? { ...s, scale: nextSize } : s));
                         }}
                         onPointerDown={(e) => {
@@ -565,9 +565,9 @@ export default function RoomClient({ roomId }: RoomClientProps) {
                           setActiveStickerId(sticker.id);
                         }}
                         className="absolute text-5xl cursor-pointer drop-shadow-md origin-center select-none"
-                        style={{ 
-                          top: '30%', left: '40%', 
-                          rotate: `${sticker.rotation}deg` 
+                        style={{
+                          top: '30%', left: '40%',
+                          rotate: `${sticker.rotation}deg`
                         }}
                         animate={{ scale: sticker.scale }} // Framer motion declarative scaling
                         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
@@ -602,8 +602,8 @@ export default function RoomClient({ roomId }: RoomClientProps) {
                   <div className="fixed bottom-28 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xl p-4 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white z-[100] flex flex-wrap gap-4 md:gap-6 items-center justify-center w-[90%] max-w-sm md:w-auto md:max-w-none">
                     <div className="flex flex-col gap-2">
                       <label className="text-[10px] font-medium tracking-widest text-slate-500 uppercase">Size</label>
-                      <input 
-                        type="range" min="0.5" max="3" step="0.1" 
+                      <input
+                        type="range" min="0.5" max="3" step="0.1"
                         value={stickers.find(s => s.id === activeStickerId)?.scale || 1}
                         onChange={e => setStickers(prev => prev.map(s => s.id === activeStickerId ? { ...s, scale: parseFloat(e.target.value) } : s))}
                         className="w-24 accent-rose-400"
@@ -611,20 +611,20 @@ export default function RoomClient({ roomId }: RoomClientProps) {
                     </div>
                     <div className="flex flex-col gap-2">
                       <label className="text-[10px] font-medium tracking-widest text-slate-500 uppercase">Tilt</label>
-                      <input 
-                        type="range" min="-180" max="180" step="5" 
+                      <input
+                        type="range" min="-180" max="180" step="5"
                         value={stickers.find(s => s.id === activeStickerId)?.rotation || 0}
                         onChange={e => setStickers(prev => prev.map(s => s.id === activeStickerId ? { ...s, rotation: parseFloat(e.target.value) } : s))}
                         className="w-24 accent-rose-400"
                       />
                     </div>
-                    <button 
+                    <button
                       onClick={() => setStickers(prev => prev.filter(s => s.id !== activeStickerId))}
                       className="p-2.5 bg-rose-50 text-rose-500 rounded-full hover:bg-rose-100 transition-colors"
                     >
                       <Trash2 size={16} strokeWidth={2} />
                     </button>
-                    <button 
+                    <button
                       onClick={() => setActiveStickerId(null)}
                       className="px-4 py-2 bg-slate-800 text-white font-medium rounded-full text-xs tracking-wider"
                     >
@@ -637,28 +637,28 @@ export default function RoomClient({ roomId }: RoomClientProps) {
                 <div className="w-full max-w-2xl mx-auto mt-8 z-10 flex flex-col items-center">
                   <p className="text-slate-400 text-xs font-medium tracking-[0.2em] uppercase mb-6">Write a Message</p>
                   <div className="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border border-white shadow-[0_10px_30px_rgba(0,0,0,0.03)] flex flex-col w-full gap-4 px-4 max-w-sm">
-                    
-                    <input 
-                      type="text" 
-                      value={stripTitle} 
-                      onChange={e => setStripTitle(e.target.value)} 
+
+                    <input
+                      type="text"
+                      value={stripTitle}
+                      onChange={e => setStripTitle(e.target.value)}
                       maxLength={30}
                       className="bg-white/50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 outline-none focus:border-rose-400 transition-colors shadow-inner"
                       placeholder="e.g. LDR PHOTOBOOTH"
                     />
-                    
-                    <input 
-                      type="text" 
-                      value={stripDate} 
-                      onChange={e => setStripDate(e.target.value)} 
+
+                    <input
+                      type="text"
+                      value={stripDate}
+                      onChange={e => setStripDate(e.target.value)}
                       maxLength={30}
                       className="bg-white/50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 outline-none focus:border-rose-400 transition-colors shadow-inner"
                       placeholder="Date or Location"
                     />
-                    
+
                     <div className="flex gap-2 justify-center mt-2">
                       {STRIP_FONTS.map(f => (
-                        <button 
+                        <button
                           key={f.id}
                           onClick={() => setStripFont(f.value)}
                           className={`flex-1 py-2 rounded-lg text-xs transition-all border ${stripFont === f.value ? 'bg-rose-400 text-white border-rose-400 shadow-md shadow-rose-200/50' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
@@ -674,7 +674,7 @@ export default function RoomClient({ roomId }: RoomClientProps) {
                 {/* Theme Selector UI */}
                 <div className="w-full max-w-4xl mx-auto mt-4 md:mt-12 mb-32 z-10 flex flex-col items-center px-4">
                   <p className="text-slate-400 text-xs font-medium tracking-[0.2em] uppercase mb-6">Pick a Theme Pack</p>
-                  
+
                   {/* Packs Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full max-w-3xl">
                     {/* Pack 1: Simple */}
