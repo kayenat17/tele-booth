@@ -79,6 +79,7 @@ export default function RoomClient({ roomId }: RoomClientProps) {
   const [stripTitle, setStripTitle] = useState('TELE-BOOTH');
   const [stripDate, setStripDate] = useState(new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }));
   const [stripFont, setStripFont] = useState('var(--font-outfit)');
+  const [finalExportUrl, setFinalExportUrl] = useState<string | null>(null);
   const exportRef = useRef<HTMLDivElement>(null);
   const constraintsRef = useRef<HTMLDivElement>(null);
 
@@ -377,15 +378,13 @@ export default function RoomClient({ roomId }: RoomClientProps) {
 
       const dataUrl = canvas.toDataURL('image/png');
       
-      // Convert large dataUrl to a blob to prevent silent download failures on Safari/Mobile
       const response = await fetch(dataUrl);
       const blob = await response.blob();
-      
       const fileName = `ldr-photobooth-${Date.now()}.png`;
       const file = new File([blob], fileName, { type: 'image/png' });
 
-      // Native Share API for mobile devices (iOS/Android)
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      // Native Share API for mobile devices (requires HTTPS, fails on local network HTTP)
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
           await navigator.share({
             files: [file],
@@ -394,19 +393,25 @@ export default function RoomClient({ roomId }: RoomClientProps) {
           return; // Native share successful
         } catch (err) {
           console.log('Share canceled or failed:', err);
-          // Proceed to standard download fallback
         }
       }
 
-      // Standard desktop fallback
       const blobUrl = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.download = fileName;
-      link.href = blobUrl;
-      document.body.appendChild(link); // Required for Firefox
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(blobUrl);
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      // If mobile and share failed (likely testing locally on HTTP), show a foolproof modal
+      if (isMobile) {
+        setFinalExportUrl(blobUrl);
+      } else {
+        // Standard desktop fallback
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = blobUrl;
+        document.body.appendChild(link); // Required for Firefox
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+      }
     } catch (err) {
       console.error('Failed to bake stickers', err);
     }
@@ -768,11 +773,26 @@ export default function RoomClient({ roomId }: RoomClientProps) {
                   Retake
                 </button>
               </div>
-
             </div>
           )}
         </div>
       </main>
+
+      {/* Foolproof Mobile Export Modal */}
+      {finalExportUrl && (
+        <div className="fixed inset-0 z-[200] bg-black/90 flex flex-col items-center justify-center p-6 backdrop-blur-sm">
+          <p className="text-white mb-6 text-xs font-medium tracking-[0.2em] uppercase text-center">
+            Long press image to save
+          </p>
+          <img src={finalExportUrl} alt="Final Export" className="max-w-full max-h-[65vh] rounded-xl shadow-2xl object-contain pointer-events-auto" />
+          <button 
+            onClick={() => setFinalExportUrl(null)}
+            className="mt-8 bg-white/20 text-white px-8 py-3 rounded-full font-medium hover:bg-white/30 backdrop-blur-md text-sm uppercase tracking-wider"
+          >
+            Close
+          </button>
+        </div>
+      )}
     </div>
   );
 }
