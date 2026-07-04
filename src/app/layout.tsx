@@ -24,8 +24,8 @@ const kalam = Kalam({
 });
 
 export const metadata: Metadata = {
-  title: 'LDR Photobooth',
-  description: 'A cozy photobooth for long distance relationships.',
+  title: 'Tele-Booth',
+  description: 'Your personal digital photobooth.',
 };
 
 export default function RootLayout({

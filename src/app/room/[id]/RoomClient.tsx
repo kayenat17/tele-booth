@@ -76,7 +76,7 @@ export default function RoomClient({ roomId }: RoomClientProps) {
   // Deco State
   const [stickers, setStickers] = useState<Sticker[]>([]);
   const [activeStickerId, setActiveStickerId] = useState<string | null>(null);
-  const [stripTitle, setStripTitle] = useState('LDR PHOTOBOOTH');
+  const [stripTitle, setStripTitle] = useState('TELE-BOOTH');
   const [stripDate, setStripDate] = useState(new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }));
   const [stripFont, setStripFont] = useState('var(--font-outfit)');
   const exportRef = useRef<HTMLDivElement>(null);
@@ -644,7 +644,7 @@ export default function RoomClient({ roomId }: RoomClientProps) {
                       onChange={e => setStripTitle(e.target.value)}
                       maxLength={30}
                       className="bg-white/50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 outline-none focus:border-rose-400 transition-colors shadow-inner"
-                      placeholder="e.g. LDR PHOTOBOOTH"
+                      placeholder="e.g. TELE-BOOTH"
                     />
 
                     <input
