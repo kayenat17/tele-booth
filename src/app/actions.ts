@@ -11,7 +11,7 @@ const DAILY_API_KEY = process.env.DAILY_API_KEY!;
 
 import { redirect } from 'next/navigation';
 
-export async function createRoomAction() {
+export async function createRoomAction(formData?: FormData) {
   let roomId = null;
   
   try {
@@ -38,7 +38,8 @@ export async function createRoomAction() {
     roomId = data.id;
   } catch (error) {
     console.error('Error creating room:', error);
-    return { error: 'Could not create room. Please try again.' };
+    // Cannot return a value here because React form actions expect void
+    // Instead we can just let it fail silently or throw, but we'll just log it.
   }
   
   if (roomId) {

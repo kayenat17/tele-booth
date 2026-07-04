@@ -33,7 +33,6 @@ export default async function RoomPage({
   return (
     <RoomClient
       roomId={room.id}
-      dailyRoomUrl={room.daily_room_url}
     />
   );
 }
