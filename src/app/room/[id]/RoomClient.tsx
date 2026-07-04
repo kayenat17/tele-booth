@@ -380,10 +380,28 @@ export default function RoomClient({ roomId }: RoomClientProps) {
       // Convert large dataUrl to a blob to prevent silent download failures on Safari/Mobile
       const response = await fetch(dataUrl);
       const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
+      
+      const fileName = `ldr-photobooth-${Date.now()}.png`;
+      const file = new File([blob], fileName, { type: 'image/png' });
 
+      // Native Share API for mobile devices (iOS/Android)
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: 'Our Photobooth',
+          });
+          return; // Native share successful
+        } catch (err) {
+          console.log('Share canceled or failed:', err);
+          // Proceed to standard download fallback
+        }
+      }
+
+      // Standard desktop fallback
+      const blobUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.download = `ldr-photobooth-${Date.now()}.png`;
+      link.download = fileName;
       link.href = blobUrl;
       document.body.appendChild(link); // Required for Firefox
       link.click();
