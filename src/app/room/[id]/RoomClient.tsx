@@ -376,10 +376,19 @@ export default function RoomClient({ roomId }: RoomClientProps) {
       });
 
       const dataUrl = canvas.toDataURL('image/png');
+      
+      // Convert large dataUrl to a blob to prevent silent download failures on Safari/Mobile
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
       const link = document.createElement('a');
       link.download = `ldr-photobooth-${Date.now()}.png`;
-      link.href = dataUrl;
+      link.href = blobUrl;
+      document.body.appendChild(link); // Required for Firefox
       link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
     } catch (err) {
       console.error('Failed to bake stickers', err);
     }
